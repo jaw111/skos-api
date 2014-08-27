@@ -136,7 +136,7 @@ skos-api:conceptSchemes a hydra:Link ;
 
 skos-api:Concept a hydra:Class ;
 	rdfs:label "Concept" ;
-	rdfs:comment "A concept represents a skos:Concept registers in the system." ;
+	rdfs:comment "A concept represents a skos:Concept registered in the system." ;
 	rdfs:subClassOf <http://xmlns.com/foaf/0.1/Document> ;
 	hydra:supportedOperation [
 	] ;
