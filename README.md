@@ -7,5 +7,5 @@
 `skos-api` contains the following:
 
 * API documentation in Turtle
-* JSON-LD context(s)
-* Example JSON-LD resources
+* JSON-LD context(s) - to do
+* Example JSON-LD resources - to do
