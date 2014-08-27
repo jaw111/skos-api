@@ -1,0 +1,144 @@
+@prefix skos-api <http://semaku.com/skos-api/vocab#>.
+@prefix hydra: <http://www.w3.org/ns/hydra/core#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+
+skos-api: a hydra:ApiDocumentation ;
+	owl:imports skos: ;
+	hydra:title "SKOS API" ;
+	hydra:description "An Application Programming Interface for interacting with thesauri, classification schemes, taxonomies, subject-heading systems, or any other type of structured controlled vocabulary described with SKOS." ;
+	hydra:supportedClass skos-api:EntryPoint , skos-api:Project , hydra:Collection, hydra:Resource .
+
+skos-api:EntryPoint a hydra:Class ;
+	rdfs:label "EntryPoint" ;
+	rdfs:comment "The main entry point or homepage of the API." ;
+	hydra:supportedOperation [
+		a hydra:Operation ;
+		rdfs:label "Retrieve a description of the entry point of the API" ;
+		hydra:method "GET" ;
+		hydra:returns skos-api:EntryPoint .
+	] ;
+	hydra:supportedProperty [
+		a hydra:SupportedProperty ;
+		rdfs:label "projects" ;
+		rdfs:comment "The collection of all projects managed by the API" ;
+		hydra:property skos-api:projects ;
+		hydra:readonly false ;
+		hydra:writeonly false .
+	] .
+
+skos-api:projects a hydra:Link ;
+	rdfs:label "projects" ;
+	rdfs:comment "a link to the collection of projects managed by the API" ;
+	rdfs:domain skos-api:EntryPoint ;
+	rdfs:range hydra:Collection ;
+	hydra:supportedOperation [
+    a hydra:Operation ;
+    rdfs:label "Create a new Project entity" ;
+    hydra:expects skos-api:Project ;
+    hydra:method "POST" ;
+    hydra:returns skos-api:Project ;
+    hydra:statusCodes [
+      rdfs:comment "If the Project entity was created successfully." ;
+      hydra:statusCode 201
+    ]
+  ] , [
+    a hydra:Operation ;
+    rdfs:label "Retrieve all Project entities" ;
+    hydra:method "GET" ;
+    hydra:returns hydra:Collection
+  ] .
+
+skos-api:Project a hydra:Class ;
+	rdfs:label "Project" ;
+	rdfs:comment "A set of SKOS concept schemes and concepts managed by a group of users." ;
+	hydra:supportedOperation [
+		a hydra:Operation ;
+		rdfs:label "Retrieve a project entity" ;
+		hydra:method "GET" ;
+		hydra:returns skos-api:Project .
+	] , [
+		a hydra:Operation ;
+		rdfs:label "Replace a project entity" ;
+		hydra:method "PUT" ;
+		hydra:expects skos-api:Project ;
+		hydra:returns skos-api:Project ;
+		hydra:statusCodes [
+			rdfs:comment "If the project entity wasn't found." ;
+			hydra:statusCode 404
+		]
+	] , [
+		a hydra:Operation ;
+		rdfs:label "Delete a project entity" ;
+		rdfs:comment "Deletes a project and all concepts and concept schemes managed in that project." ;
+		hydra:method "DELETE" ;
+		hydra:returns owl:Nothing
+	] ;
+	hydra:supportedProperty [
+		a hydra:SupportedProperty ;
+		rdfs:label "concepts" ;
+		rdfs:comment "The collection of all concepts in a project" ;
+		hydra:property skos-api:concepts ;
+		hydra:readonly false ;
+		hydra:writeonly false .
+	] , [
+		a hydra:SupportedProperty ;
+		rdfs:label "concept schemes" ;
+		rdfs:comment "The collection of all concept schemes in a project" ;
+		hydra:property skos-api:conceptSchemes ;
+		hydra:readonly false ;
+		hydra:writeonly false .
+	] .
+	
+skos-api:concepts a hydra:Link ;
+	rdfs:label "concepts" ;
+	rdfs:comment "a link to the collection of concepts managed in the project" ;
+	rdfs:domain skos-api:Project ;
+	rdfs:range hydra:Collection ;
+	hydra:supportedOperation [
+    a hydra:Operation ;
+    rdfs:label "Create a new Concept entity" ;
+    hydra:expects skos-api:Concept ;
+    hydra:method "POST" ;
+    hydra:returns skos-api:Concept ;
+    hydra:statusCodes [
+      rdfs:comment "If the Concept entity was created successfully." ;
+      hydra:statusCode 201
+    ]
+  ] , [
+    a hydra:Operation ;
+    rdfs:label "Retrieve all Concept entities in the Project" ;
+    hydra:method "GET" ;
+    hydra:returns hydra:Collection
+  ] .
+	
+skos-api:conceptSchemes a hydra:Link ;
+	rdfs:label "concept schemes" ;
+	rdfs:comment "a link to the collection of concept schemes managed in the project" ;
+	rdfs:domain skos-api:Project ;
+	rdfs:range hydra:Collection ;
+	hydra:supportedOperation [
+    a hydra:Operation ;
+    rdfs:label "Create a new Concept Scheme entity" ;
+    hydra:expects skos-api:ConceptScheme ;
+    hydra:method "POST" ;
+    hydra:returns skos-api:ConceptScheme ;
+    hydra:statusCodes [
+      rdfs:comment "If the Concept Scheme entity was created successfully." ;
+      hydra:statusCode 201
+    ]
+  ] , [
+    a hydra:Operation ;
+    rdfs:label "Retrieve all Concept Scheme entities in the Project" ;
+    hydra:method "GET" ;
+    hydra:returns hydra:Collection
+  ] .
+
+skos-api:Concept a hydra:Class ;
+	rdfs:label "Concept" ;
+	rdfs:comment "A concept represents a skos:Concept registers in the system." ;
+	rdfs:subClassOf <http://xmlns.com/foaf/0.1/Document> ;
+	hydra:supportedOperation [
+	] ;
+	hydra:supportedProperty [
+	] .
