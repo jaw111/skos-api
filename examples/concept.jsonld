@@ -1,0 +1,45 @@
+{
+  "@context": "/jaw111/skos-api/contexts/Concept.jsonld",
+  "@id": "",
+  "primaryTopic": {
+    "@id": "http://example.com/concepts/1234",
+    "prefLabel": [
+      "Vehicle",
+      {
+        "@value": "Forklift truck",
+        "@language": "en"
+      },
+      {
+        "@value": "Gabelstapler",
+        "@language": "de"
+      },
+      {
+        "@value": "フォークリフト",
+        "@language": "ja"
+      }
+    ],
+    "altLabel": [
+      "Pallet truck",
+      "Reach_truck"
+    ],
+    "hiddenLabel": [
+      "Fork-lift truck",
+      "Fork lift truck",
+      "Forklift",
+      "Forktruck",
+      "Lift truck"
+    ],
+    "broader": [
+      "http://example.com/concepts/1233",
+      "http://example.com/concepts/1364"
+    ],
+    "related": [
+      "http://example.com/concepts/1936"
+    ],
+    "inScheme": "http://example.com/conceptSchemes/1"
+  },
+  "created": "2014-08-13T21:32:00Z",
+  "modified": "2014-09-11T15:01:00Z",
+  "creator": "http://example.com/users/alice",
+  "label": "A representation of the skos:Concept 'Forklift truck'"
+}
