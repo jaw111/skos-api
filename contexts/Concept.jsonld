@@ -1,0 +1,41 @@
+{
+  "@context": {
+    "@vocab": "http://www.w3.org/2004/02/skos/core#",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "broader": {
+      "@type": "@id"
+    },
+    "narrower": {
+      "@type": "@id"
+    },
+    "related": {
+      "@type": "@id"
+    },
+    "inScheme": {
+      "@type": "@id"
+    },
+    "topConceptOf": {
+      "@type": "@id"
+    },
+    "primaryTopic": {
+      "@id": "foaf:primaryTopic",
+      "@type": "@id"
+    },
+    "created": {
+      "@id": "dcterms:created",
+      "@type": "xsd:dateTime"
+    },
+    "modified": {
+      "@id": "dcterms:modified",
+      "@type": "xsd:dateTime"
+    },
+    "creator": {
+      "@id": "dcterms:creator",
+      "@type": "@id"
+    },
+    "label": "rdfs:label"
+  }
+}
