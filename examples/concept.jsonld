@@ -4,7 +4,7 @@
   "primaryTopic": {
     "@id": "http://example.com/concepts/1234",
     "prefLabel": [
-      "Vehicle",
+      "Forklift truck",
       {
         "@value": "Forklift truck",
         "@language": "en"
