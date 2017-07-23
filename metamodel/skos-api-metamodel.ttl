@@ -1,0 +1,45 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix hydra: <http://www.w3.org/ns/hydra/core#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos-api: <http://skos-api.org/metamodel#> .
+@prefix api: <http://skos-api.org/api#> .
+
+skos-api: owl:imports skos: .
+
+skos-api:Project a rdfs:Class ;
+.
+
+skos-api:ConceptScheme a rdfs:Class ;
+.
+
+skos-api:Concept a rdfs:Class ;
+.
+
+# is it necessary to define the goal?
+# api:Goal a sd:Graph .
+
+api:Intent a rdfs:Class .
+api:PostCondition rdfs:subClassOf sh:Shape .
+
+skos-api:CreateConcept a hydra:Operation ;
+    rdfs:label "Create New Concept" ;
+    hydra:description "Creates a new SKOS concept in your thesaurus." ;
+.
+
+skos-api:GetConcept a hydra:Operation ;
+  rdfs:label "Get complete concept" ;
+  hydra:description "Get a complete SKOS concept representation." ;
+.
+
+skos-api:AddPrefLabel a hydra:Operation ;
+  rdfs:label "Add prefLabel" ;
+  hydra:description "Adds a preferred label to an existing SKOS concept." ;
+.
+
+skos-api:AddAltLabel a hydra:Operation ;
+  rdfs:label "Add altLabel" ;
+  hydra:description "Adds an alternative label to an existing SKOS concept." ;
+.
