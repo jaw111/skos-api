@@ -1,0 +1,300 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix hydra: <http://www.w3.org/ns/hydra/core#> .
+@prefix hydra-ext: <http://skos-api.org/hydra-extended#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix pp: <http://someapivendor.com/api/> .
+@prefix skos-api: <http://skos-api.org/metamodel#> .
+@prefix api: <http://skos-api.org/api#> .
+
+hydra-ext:method a hydra:TemplatedLink .
+
+pp:BadRequest a hydra:Status ;
+  hydra:code "400" ;
+  hydra:description "Bad request" ;
+.
+
+pp: a hydra:ApiDocumentation ;
+  hydra:supportedClass pp:MethodList ;
+.
+
+pp:MethodList a hydra:Class ;
+  hydra-ext:method
+    pp:CreateConceptMethod , 
+    pp:GetCompleteConceptMethod ,
+    pp:AddPrefLabelMethod ,
+    pp:AddAltLabelMethod ;
+.
+
+pp:CreateTopConceptMethod a hydra:IriTemplate ;
+  hydra:template "/PoolParty/api/thesaurus/{project}/createConcept{?parent,prefLabel}" ;
+  hydra:variableRepresentation hydra:BasicRepresentation ;
+  hydra:mapping 
+    [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "project" ;
+        hydra:property skos-api:projectId ;
+        hydra:required "true"^^xsd:boolean ;
+    ] , 
+    [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "parent" ;
+        hydra:property skos-api:ConceptScheme ;
+        hydra:required "true"^^xsd:boolean ;
+    ] , 
+    [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "prefLabel" ;
+        hydra:property skos-api:prefLabel ;
+        hydra:required "true"^^xsd:boolean ;
+    ] ;
+  hydra:supportedOperation [
+    a hydra:Operation ;
+    hydra:method "POST" ;
+    rdfs:label "Create New Concept" ;
+    hydra:description "Creates a new SKOS top concept in your thesaurus." ;
+    hydra:returns skos-api:Concept ;
+    hydra:statusCodes 
+      [
+        hydra:code "200" ;
+        hydra:description "If the top concept was created."
+      ] ,
+      pp:BadRequest ;
+  ] ;
+  # TODO: should be an IRI
+  api:action "CREATE" ; 
+  api:postCondition [
+    a sh:NodeShape ;
+    sh:targetClass skos-api:Concept ;
+    sh:property 
+      [
+        a sh:PropertyShape ;
+        sh:path skos-api:prefLabel ;
+        sh:nodeKind sh:Literal ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+      ] ;
+    sh:closed true ;
+  ] ;
+.
+
+pp:CreateConceptMethod a hydra:IriTemplate ;
+  hydra:template "/PoolParty/api/thesaurus/{project}/createConcept{?parent,prefLabel}" ;
+  hydra:variableRepresentation hydra:BasicRepresentation ;
+  hydra:mapping 
+    [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "project" ;
+        hydra:property skos-api:projectId ;
+        hydra:required "true"^^xsd:boolean ;
+    ] , 
+    [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "parent" ;
+        hydra:property skos-api:conceptParent ;
+        hydra:required "true"^^xsd:boolean ;
+    ] , 
+    [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "prefLabel" ;
+        hydra:description "Preferred label in the default language for the newly created concept." ;
+        hydra:property skos-api:prefLabel ;
+        hydra:required "true"^^xsd:boolean ;
+    ] ;
+  hydra:supportedOperation [
+    a hydra:Operation ;
+    hydra:method "POST" ;
+    rdfs:label "Create New Concept" ;
+    hydra:description "Creates a new SKOS concept in your thesaurus." ;
+    hydra:returns skos-api:Concept ;
+    hydra:statusCodes 
+      [
+        hydra:code "200" ;
+        hydra:description "If the concept was created."
+      ] ,
+      pp:BadRequest ;
+  ] ;
+  # TODO: should be an IRI
+  api:action "CREATE" ; 
+  api:postCondition [
+    a sh:NodeShape ;
+    sh:targetClass skos-api:Concept ;
+    sh:property 
+      [
+        a sh:PropertyShape ;
+        sh:path skos-api:parent ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+      ] ,
+      [
+        a sh:PropertyShape ;
+        sh:path skos-api:prefLabel ;
+        sh:nodeKind sh:Literal ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+      ] ;
+    sh:closed true ;
+  ] ;
+.
+
+pp:GetCompleteConceptMethod a hydra:IriTemplate ;
+  # just grab all skos properties always
+  # excluded param 'workflowStatus' because this is pp sepecific
+  hydra:template "/PoolParty/api/thesaurus/{project}/concept{?concept}&properties=skos:altLabel,skos:hiddenLabel,skos:definition,skos:notation,skos:example,skos:scopeNote,skos:broader,skos:narrower,skos:related,skos:inScheme,skos:exactMatch,skos:closeMatch,skos:broaderMatch,skos:narrowerMatch,skos:relatedMatch,skos:topConceptOf{&language}" ;
+  hydra:variableRepresentation hydra:BasicRepresentation ;
+  hydra:mapping 
+    [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "project" ;
+        hydra:property skos-api:projectId ;
+        hydra:required "true"^^xsd:boolean ;
+    ] , 
+    [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "concept" ;
+        hydra:property skos-api:Concept ;
+        hydra:required "true"^^xsd:boolean ;
+    ] , 
+    [
+    # do we need this language param now?
+      a hydra:IriTemplateMapping ;
+        hydra:variable "language" ;
+        hydra:description "Only concept with label in specified language will be displayed. If no language is given, the default language of the project will be used." ;
+        hydra:property skos-api:labelLanguage ;
+        hydra:required "false"^^xsd:boolean ;
+    ] ;
+  hydra:supportedOperation [
+    a hydra:Operation ;
+    hydra:method "GET" ;
+    rdfs:label "Get complete concept" ;
+    hydra:description "Get a complete SKOS concept representation." ;
+    hydra:returns skos-api:Concept ;
+    hydra:statusCodes 
+      [
+        hydra:code "200" ;
+        hydra:description "If the Concept was created."
+      ] ,
+      pp:BadRequest ;
+  ] ;
+  # TODO: should be an IRI
+  api:action "RETRIEVE" ; 
+  api:postCondition [
+    a sh:NodeShape ;
+    sh:targetClass skos-api:Concept ;
+    sh:property 
+      [
+        a sh:PropertyShape ;
+        sh:path skos-api:parent ;
+        sh:nodeKind sh:IRI ;
+        sh:maxCount 1 ;
+      ] ,
+      [
+        a sh:PropertyShape ;
+        sh:path skos-api:prefLabel ;
+        sh:nodeKind sh:Literal ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+      ] ,
+      [
+        a sh:PropertyShape ;
+        sh:path skos-api:altLabel ;
+        sh:nodeKind sh:Literal ;
+        sh:datatype xsd:string ;
+      ] 
+      #etc.
+  ] ;
+.
+
+pp:AddPrefLabelMethod a hydra:IriTemplate ;
+  hydra:template "/PoolParty/api/thesaurus/{project}/concept{?concept,label}&property=preferredLabel{&language}" ;
+  hydra:variableRepresentation hydra:BasicRepresentation ;
+  hydra:mapping 
+    [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "project" ;
+        hydra:property skos-api:projectId ;
+        hydra:required "true"^^xsd:boolean ;
+    ] , [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "concept" ;
+        hydra:property skos-api:Concept ;
+        hydra:required "true"^^xsd:boolean ;
+    ] , [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "label" ;
+        hydra:property skos-api:prefLabel ;
+        hydra:required "true"^^xsd:boolean ;
+    ] , [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "language" ;
+        hydra:description "The language of the literal - default language if not defined" ;
+        hydra:property skos-api:labelLanguage ;
+        hydra:required "false"^^xsd:boolean ;
+    ] ;
+  hydra:supportedOperation [
+    a hydra:Operation ;
+    hydra:method "POST" ;
+    rdfs:label "Add prefLabel" ;
+    hydra:description "Adds a preferred label to an existing SKOS concept." ;
+    # does this make sense?
+    hydra:returns owl:Nothing ;
+    hydra:statusCodes 
+      [
+        hydra:code "200" ;
+        hydra:description "If the addition was successful."
+      ] ,
+      pp:BadRequest ;
+  ]
+.
+
+pp:AddAltLabelMethod a hydra:IriTemplate ;
+  hydra:template "/PoolParty/api/thesaurus/{project}/concept{?concept,label}&property=alternativeLabel{&language}" ;
+  hydra:variableRepresentation hydra:BasicRepresentation ;
+  hydra:mapping 
+    [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "project" ;
+        hydra:property skos-api:projectId ;
+        hydra:required "true"^^xsd:boolean ;
+    ] , 
+    [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "concept" ;
+        hydra:property skos-api:Concept ;
+        hydra:required "true"^^xsd:boolean ;
+    ] , 
+    [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "label" ;
+        hydra:property skos-api:altLabel ;
+        hydra:required "true"^^xsd:boolean ;
+    ] , 
+    [
+      a hydra:IriTemplateMapping ;
+        hydra:variable "language" ;
+        hydra:description "The language of the literal - default language if not defined" ;
+        hydra:property skos-api:labelLanguage ;
+        hydra:required "false"^^xsd:boolean ;
+    ] ;
+  hydra:supportedOperation [
+    a hydra:Operation ;
+    hydra:method "POST" ;
+    rdfs:label "Add altLabel" ;
+    hydra:description "Adds an alternative label to an existing SKOS concept." ;
+    # does this make sense?
+    hydra:returns owl:Nothing ;
+    hydra:statusCodes 
+      [
+        hydra:code "200" ;
+        hydra:description "If the addition was successful."
+      ] ,
+      pp:BadRequest ;
+  ]
+.

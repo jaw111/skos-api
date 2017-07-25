@@ -1,0 +1,39 @@
+{
+  "@context" : {
+    "skos" : "http://www.w3.org/2004/02/skos/core#",
+    "uri" : "@id",
+    "prefLabel" : "skos:prefLabel",
+    "altLabels" : {
+      "@id" : "skos:altLabel",
+      "@container" : "@set"
+    },
+    "hiddenLabels" : {
+      "@id" : "skos:hiddenLabel",
+      "@container" : "@set"
+    },
+    "definitions" : {
+      "@id" : "skos:definition",
+      "@container" : "@set"
+    },
+    "broaders" : {
+      "@id" : "skos:broader",
+      "@type" : "@id",
+      "@container" : "@set"
+    },
+    "narrowers" : {
+      "@id" : "skos:narrower",
+      "@type" : "@id",
+      "@container" : "@set"
+    },
+    "relateds" : {
+      "@id" : "skos:related",
+      "@type" : "@id",
+      "@container" : "@set"
+    },
+    "conceptSchemes" : {
+      "@id" : "skos:inScheme",
+      "@type" : "@id",
+      "@container" : "@set"
+    }
+  }
+}
